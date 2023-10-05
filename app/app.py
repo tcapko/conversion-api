@@ -8,7 +8,7 @@ from rq.job import Job
 from redis import Redis
 import subprocess
 import os
-from converter import convert_to_pdf
+from converterLib import converter
 
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)  # Change the log level as needed
@@ -61,25 +61,34 @@ class Convert(Resource):
     @api.response(202, 'Conversion job submitted', convert_response_model)
     @api.response(400, 'Bad Request')
     @api.doc(description='Converts a file to PDF format')
-    def post(self):
-        if 'file' in request.files:
-            # File is provided as a multipart/form-data attachment
-            file = request.files['file']
-            file_path = os.path.join('uploads', file.filename)
-            file.save(file_path)
-        elif 'file_path' in request.json:
-            # File path is provided as a JSON field
-            file_path = request.json['file_path']
-            if not os.path.isfile(file_path):
-                return {'error': 'Invalid file path'}, 400
-        else:
-            return {'error': 'No file or file path provided'}, 400
+    def post(self):  # Add the self parameter here
+        try:
+            if 'file' in request.files:
+                # File is provided as a multipart/form-data attachment
+                file = request.files['file']
+                file_path = os.path.join('/data/uploads', file.filename)
+                file.save(file_path)
+                app.logger.info(f"file_path: {str(file_path)}, file.filename: {str(file.filename)}")
+            elif 'file_path' in request.json:
+                # File path is provided as a JSON field
+                file_path = request.json['file_path']
+                if not os.path.isfile(file_path):
+                    return {'error': 'Invalid file path'}, 400
+            else:
+                return {'error': 'No file or file path provided'}, 400
 
-        # Enqueue the conversion task
-        job = q.enqueue(convert_to_pdf, file_path)
+            # Enqueue the conversion task
+            job = q.enqueue(converter.convert_to_pdf, file_path)
 
-        # Return a JSON response with the job ID
-        return {'job_id': job.id}, 202
+            # Return a JSON response with the job ID
+            return {'job_id': job.id}, 202
+        except TypeError as e:
+            # Handle the TypeError exception here
+            return {'error': str(e)}, 400
+        except Exception as e:
+            # Handle other exceptions if needed
+            return {'error': str(e)}, 500
+
 
 class Status(Resource):
     @api.doc(description='Retrieves the conversion status of a specific job')
@@ -110,7 +119,7 @@ class Download(Resource):
         pdf_file_path = job.result
 
         # Send the file for download
-        return send_file(pdf_file_path, as_attachment=True)
+        return send_file(pdf_file_path, as_attachment=True, attachment_filename='output.pdf')
 
 
 api.add_resource(Convert, '/convert')
@@ -119,4 +128,3 @@ api.add_resource(Download, '/download/<job_id>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-

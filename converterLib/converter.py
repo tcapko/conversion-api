@@ -13,12 +13,13 @@ logger.addHandler(console_handler)
 def convert_to_pdf(file_path, job_id=None):
     pdf_path = file_path.rsplit('.', 1)[0] + '.pdf'
     try:
-        logger.info("TEST")
+        logger.info("Trying PDF conversion...")
         # Run the command and capture the output
-        result = subprocess.run(['unoconv', '--format=pdf', '--output', pdf_path, file_path], capture_output=True, text=True)
+        result = subprocess.run(['unoconv', '-vvv', '--format=pdf', '--output', pdf_path, file_path], capture_output=True, text=True)
 
         # Log the command output
-        logger.info('Command output:\n%s', result.stdout)
+        logger.info('>> Unoconv command output:  \n%s', result.stdout)
+        logger.info('>> Unoconv stderr output: \n%s', result.stderr)
 
         # Check the return code
         if result.returncode == 0:

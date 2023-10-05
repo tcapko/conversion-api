@@ -1,6 +1,9 @@
 FROM python:3.9
 WORKDIR /app
+RUN apt-get update && apt-get -y install unoconv libreoffice
+RUN sed -i 's|#!/usr/bin/env python3|#!/usr/bin/python3|' /usr/bin/unoconv
 COPY worker/requirements.txt .
+COPY ./converterLib /app/converterLib
 RUN pip install --no-cache-dir -r requirements.txt
 COPY worker .
 CMD ["python", "worker.py"]

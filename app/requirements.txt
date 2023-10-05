@@ -5,3 +5,4 @@ MarkupSafe==2.0.1
 redis==5.0.1
 rq==1.15.1
 flask-swagger-ui==4.11.1
+-e converterLib

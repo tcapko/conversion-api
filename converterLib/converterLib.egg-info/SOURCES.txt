@@ -1,0 +1,6 @@
+setup.py
+converterLib.egg-info/PKG-INFO
+converterLib.egg-info/SOURCES.txt
+converterLib.egg-info/dependency_links.txt
+converterLib.egg-info/requires.txt
+converterLib.egg-info/top_level.txt

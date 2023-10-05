@@ -13,6 +13,7 @@
 from rq import Worker, Queue, Connection
 from redis import Redis
 import os
+from converterLib import converter
 
 # Set up the Redis connection
 redis_conn = Redis(host='redis', port=6379)
