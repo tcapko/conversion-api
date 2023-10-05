@@ -68,7 +68,6 @@ class Convert(Resource):
                 file = request.files['file']
                 file_path = os.path.join('/data/uploads', file.filename)
                 file.save(file_path)
-                app.logger.info(f"file_path: {str(file_path)}, file.filename: {str(file.filename)}")
             elif 'file_path' in request.json:
                 # File path is provided as a JSON field
                 file_path = request.json['file_path']
@@ -78,6 +77,7 @@ class Convert(Resource):
                 return {'error': 'No file or file path provided'}, 400
 
             # Enqueue the conversion task
+            app.logger.info("Sending conversion job to worker...")
             job = q.enqueue(converter.convert_to_pdf, file_path)
 
             # Return a JSON response with the job ID

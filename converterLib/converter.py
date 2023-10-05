@@ -18,8 +18,8 @@ def convert_to_pdf(file_path, job_id=None):
         result = subprocess.run(['unoconv', '-vvv', '--format=pdf', '--output', pdf_path, file_path], capture_output=True, text=True)
 
         # Log the command output
-        logger.info('>> Unoconv command output:  \n%s', result.stdout)
-        logger.info('>> Unoconv stderr output: \n%s', result.stderr)
+        # logger.info('>> Unoconv command output:  \n%s', result.stdout)
+        # logger.info('>> Unoconv stderr output: \n%s', result.stderr)
 
         # Check the return code
         if result.returncode == 0:
@@ -27,8 +27,6 @@ def convert_to_pdf(file_path, job_id=None):
             return pdf_path
         else:
             logger.error('Conversion to PDF failed')
-        
+
     except Exception as e:
         logger.exception('An error occurred during conversion to PDF: %s', str(e))
-
-
