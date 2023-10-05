@@ -26,7 +26,7 @@ api = Api(app, version='1.0', title='File Conversion API', description='API endp
 
 
 # Set up the Redis connection
-conn = Redis(host='localhost', port=6379)
+conn = Redis(host='redis', port=6379)
 
 # Set up the RQ queue
 q = Queue(connection=conn)
@@ -118,5 +118,5 @@ api.add_resource(Status, '/status/<job_id>')
 api.add_resource(Download, '/download/<job_id>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
 

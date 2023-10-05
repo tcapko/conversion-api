@@ -1,5 +1,5 @@
 flask
-flask-restx
+flask-restx==1.0.3
 redis
 rq
 flask-swagger-ui

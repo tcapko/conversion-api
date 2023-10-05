@@ -1,5 +1,6 @@
-flask
-flask-restx
+flask<2.0.0
+Werkzeug<2.0.0
+flask-restx==1.0.3
 redis
 rq
 flask-swagger-ui

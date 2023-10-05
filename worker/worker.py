@@ -15,7 +15,7 @@ from redis import Redis
 import os
 
 # Set up the Redis connection
-redis_conn = Redis(host='localhost', port=6379)
+redis_conn = Redis(host='redis', port=6379)
 
 if __name__ == '__main__':
 
