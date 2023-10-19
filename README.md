@@ -5,11 +5,10 @@
 Run api with:
 
 ```
-python app/app.py
+docker-compose up --build
 ```
 
-And worker with:
-
+## Stopping
 ```
-python worker/worker.py
+docker-compose down
 ```
